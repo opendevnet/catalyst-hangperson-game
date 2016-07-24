@@ -1,0 +1,186 @@
+package HangPersonGame::Controller::Root;
+use Moose;
+use namespace::autoclean;
+
+BEGIN { extends 'Catalyst::Controller' }
+
+#
+# Sets the actions in this controller to be registered with no prefix
+# so they function identically to actions created in MyApp.pm
+#
+__PACKAGE__->config(namespace => '');
+
+# For debugging
+use Data::Dumper;
+
+=encoding utf-8
+
+=head1 NAME
+
+HangPersonGame::Controller::Root - Root Controller for HangPersonGame
+
+=head1 DESCRIPTION
+
+[enter your description here]
+
+=head1 METHODS
+
+=head2 index
+
+The root page (/)
+
+=cut
+
+# ================================================================ #
+#
+#  Root Controller:
+#
+sub index :Path :Args(0)  {
+    my ( $self, $c ) = @_;
+    # Hello World
+    #$c->response->body( $c->welcome_message );
+}
+
+sub create_game : Local {
+   my ( $self, $c ) = @_;
+	 #$c->session->{game} = $c->model('WordGuesser') ;
+   my $game = $c->model('WordGuesser') ;
+   $game->set_word() ;
+
+	 #
+	 # Test with the longest word in the English language:
+	 #
+	 # my $test_word = "pneumonoultramicroscopicsilicovolcanoconiosis";
+	 # $game->set_word($longest_word) ;
+	 #
+   $c->log->debug(" This is the game we are putting in the session\n" .Dumper($game) ) ;
+   $c->session->{game} =  $game ;
+   $c->log->debug(" Is it in the session? \n" .Dumper($c->session->{game} ) ) ;
+
+   $c->forward("game");
+}
+
+sub game :Local :Args(0) {
+	 my ( $self, $c ) = @_;
+  
+	$c->log->debug("\n\nXXXXXXXXXXXXXXX START A GAME ! XXXXXXXXXXXXXXXX\n\n" );
+  $c->log->debug(" This is the game now in session\n" .Dumper($c->session->{game} ) ) ;
+
+  my $game = $c->session->{game} ;
+	my $word = $game->{word} ;
+
+	$c->log->debug("\n++++++++ SELF ++++++++\n" .Dumper($self) ); 
+	$c->log->debug("\n++++++++ THE WORD ++++++++\n" .Dumper($word) ); 
+	$c->log->debug( $c->stash->{word} ); 
+	$c->stash( template => 'show.tt');
+	$c->detach('guess');
+}
+
+sub guess :Local {
+	my ( $self, $c ) = @_;
+
+  my $game = $c->session->{game} ;
+	my $word = $game->{word} ;
+
+	$c->log->debug("\n++++++++ THE WORD LATER ++++++++\n" .Dumper($word) ); 
+
+	my $guessed_letter  = $c->request->body_params->{guess} ; 
+
+	$game->guess($guessed_letter);
+
+	my $badguesses = join "", $game->wrong_guesses;
+	my $goodguesses = join "", $game->guesses;
+	my $maskedword = $game->word_with_guesses() ;
+
+	$c->stash( badguesses => $badguesses ) ; 
+	$c->stash( goodguesses => $goodguesses ) ; 
+	$c->stash( last_guess => $guessed_letter );
+	$c->stash( maskedword => $maskedword );
+	$c->stash( word => $word );
+
+	$c->log->debug("WTF?!?!? the STASH??!".Dumper($c->stash));
+
+	$c->stash( template => 'show.tt');
+}
+
+=head2 default
+
+Standard 404 error page
+
+=cut
+
+sub default :Path {
+    my ( $self, $c ) = @_;
+    $c->response->body( 'Page not found' );
+    $c->response->status(404);
+}
+
+=head2 end
+
+Attempt to render a view, if needed.
+
+=cut
+
+sub end : ActionClass('RenderView') {}
+
+=head1 AUTHOR
+
+Graham Todd
+
+=head1 LICENSE
+
+This library is free software. You can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+=cut
+
+__PACKAGE__->meta->make_immutable;
+
+1;
+
+__END__
+## EARLIER ATTEMPT WITHOUT SESSSIONS:
+
+sub game :Local :Args(0) {
+	 my ( $self, $c ) = @_;
+	#my $game =  $c->model('WordGuesser') ;
+	#$game->set_word() ;
+	#
+
+	#$c->model('WordGuesser')->set_word();
+	#my $game =  $c->model('WordGuesser') ;
+	#my $word = $game->get_word() ;
+  #my $word = $c->model('WordGuesser')->get_word() ;
+  #$c->stash( word => $word );
+	$c->stash( template => 'show.tt');
+	$c->detach('guess');
+}
+
+
+
+sub guess :Local {
+#sub guess : Private {
+	my ( $self, $c ) = @_;
+#	my $word = $c->stash->{word} ;
+#	my $game =  $c->model('WordGuesser', word =>  $word ) ;
+# my $word = $game->get_word() ;
+#	$c->log->debug("WORD UP" .Dumper($c) ); 
+	#$c->stash( word => $word );
+
+#} 
+
+
+	#$c->model('WordGuesser')->guess($guessed_letter);
+	#my $badguesses = $c->model('WordGuesser')->wrong_guesses();
+	#my $goodguesses = $c->model('wordGuesser')->guessed_str();
+#	my $badguesses = $c->model('WordGuesser')->wrong_guesses();
+#	my $goodguesses = $c->model('WordGuesser')->guessed_str();
+#	my $maskedword = $c->model('WordGuesser')->word_with_guesses() ;
+
+
+#	my $badguesses = $c->model('WordGuesser')->wrong_guesses();
+#	my $goodguesses = $c->model('WordGuesser')->guessed_str();
+#	my $maskedword = $c->model('WordGuesser')->word_with_guesses() ;
+
+
+	$c->log->debug("\n++++++++ THE WORD IN STASH ++++++++\n" , $c->stash->{word} ); 

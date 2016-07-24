@@ -1,0 +1,37 @@
+[% WRAPPER wrapper.tt title = c.config.name %]
+
+
+<div style="border: 8px solid darkgreen; padding: 20px ">
+
+<h2> Start a new game?</h2>
+
+
+<div style="text-align: center; >
+
+<div style="min-height:200px; width: 100%; clear:both;">
+
+<table height="222px" style="margin-left: auto; margin-right: auto;">
+
+<tr valign="bottom">
+<td>
+<form name="new_game" method="POST" action="create_game">
+  <input style="margin-left:auto; margin-right:auto;" type="submit" value="New Game"> &nbsp;
+</form> 
+	</td>
+	<td>
+<form name="new_game" method="POST" action="create_supergame">
+  <input style="margin-left:auto; margin-right:auto;" type="submit" value="Super Game">
+</form>
+</td>
+</tr>
+
+</table>
+
+</div>
+
+
+</div>
+
+</div>
+
+[% END %]

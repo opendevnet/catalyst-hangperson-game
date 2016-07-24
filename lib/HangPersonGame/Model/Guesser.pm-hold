@@ -1,0 +1,55 @@
+package HangPersonGame::Model::Guesser;
+
+#use Moose ;
+#use namespace::clean -except => 'meta';
+
+use strict;
+use warnings;
+
+#extends 'Catalyst::Model';
+use parent 'Catalyst::Model';
+
+use WordGuesser ;
+
+#my $game = WordGuesser->new();
+
+sub guess {
+    my ($self, $letters) = @_;
+    #  return &WordGuesser::guess($letters);
+#      return $game->guess($letters);
+    #  return $self->guess($letters);
+      return guess($letters);
+}
+
+sub _show_word {
+    my $self = shift ;
+#    return &WordGuesser::show_word ;
+    #return $game->_show_word ;
+    return $self->_show_word ;
+}
+
+sub word_with_guesses {
+    my $self = shift ;
+#    return &WordGuesser::word_with_guesses ;
+    #return $game->word_with_guesses ;
+    return $self->word_with_guesses ;
+}
+
+sub guesses {
+    my $self = shift ;
+#    return &WordGuesser::guesses ;
+    #return $game->guesses ;
+    return $self->guesses ;
+}
+
+sub wrong_guesses {
+    my $self = shift ;
+#    return &WordGuesser::guesses ;
+    return $self->wrong_guesses ;
+}
+
+#__PACKAGE__->meta->make_immutable ;
+
+1;
+
+

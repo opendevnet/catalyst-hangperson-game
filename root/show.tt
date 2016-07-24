@@ -1,0 +1,57 @@
+[% WRAPPER wrapper.tt title = c.config.name %]
+
+<div style="border: 8px solid darkgreen; padding: 20px ">
+
+<h2>Guess a letter</h2>
+
+<p> Letters guessed: &nbsp; &nbsp; &nbsp; 
+
+<span style="font-weight: bold ; color: red">  
+[%  badguesses   %] 
+
+</span>
+</p>
+
+
+<p>Word so far: &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+
+<span style="font-weight: bold ; color: blue">  
+
+  [% maskedword %]    
+
+</span>
+
+</p>
+
+
+<hr>
+
+<h2>Enter letter to guess</h2>
+
+<form name="guess" method="POST" action="guess">
+	<input name="guess" size="1" type="text" autocomplete="off" autofocus />   
+	<input type="submit" value="Guess"/>
+</form>
+
+<br/> 
+
+<div style="text-align: center;">
+
+	<form name="new_game" method="POST" action="create_game">
+  	 <input type="submit" value="New Game">
+	</form>
+
+</div>
+
+</div> <!-- end of box -->
+
+<!--
+
+<p>Last guess:  [%  last_guess   %]
+<p>Word:  [% word %] </p>
+
+-->
+
+
+
+[% END %]

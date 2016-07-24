@@ -1,0 +1,1 @@
+perl -Ilib -MDDP -MWordGuesser -E '$s=WordGuesser->new; $s->set_word("textual"); say $s->show_word; p $s; p $s->{word}; $s->guess($_) for qw<a e i o u>; p $s->guesses; p $s->wrong_guesses ; p $s->word_with_guesses ; say $s->guessed_str '
